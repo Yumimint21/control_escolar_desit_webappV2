@@ -1,0 +1,110 @@
+<div class="wrapper">
+    <div class="section-registro">
+        <div class="header-registro">
+            <h1 *ngIf="!isUpdate">Registrar Nuevo Evento</h1>
+            <h1 *ngIf="isUpdate">Editar Evento</h1>
+            <button mat-icon-button (click)="regresar()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+
+        <div class="body-registro">
+            <mat-form-field class="mat-input" appearance="outline">
+                <mat-label>Nombre del evento</mat-label>
+                <input matInput [(ngModel)]="evento.nombre" placeholder="Escribe el nombre">
+                <mat-error *ngIf="errors.nombre">{{errors.nombre}}</mat-error>
+            </mat-form-field>
+
+            <div class="row-inputs">
+                <mat-form-field class="mat-input half-width" appearance="outline">
+                    <mat-label>Tipo de evento</mat-label>
+                    <mat-select [(ngModel)]="evento.tipo">
+                        <mat-option *ngFor="let tipo of lista_tipos" [value]="tipo">{{tipo}}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="errors.tipo">{{errors.tipo}}</mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="mat-input half-width" appearance="outline">
+                    <mat-label>Responsable</mat-label>
+                    <mat-select [(ngModel)]="evento.responsable">
+                        <mat-option *ngFor="let resp of lista_responsables" [value]="resp.id">
+                            {{resp.nombre}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="errors.responsable">{{errors.responsable}}</mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="row-inputs">
+                <mat-form-field class="mat-input third-width" appearance="outline">
+                    <mat-label>Fecha</mat-label>
+                    <input matInput [matDatepicker]="picker" [(ngModel)]="evento.fecha_realizacion">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    <mat-error *ngIf="errors.fecha_realizacion">{{errors.fecha_realizacion}}</mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="mat-input third-width" appearance="outline">
+                    <mat-label>Hora Inicio</mat-label>
+                    <input matInput type="time" [(ngModel)]="evento.hora_inicio">
+                    <mat-error *ngIf="errors.hora_inicio">{{errors.hora_inicio}}</mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="mat-input third-width" appearance="outline">
+                    <mat-label>Hora Fin</mat-label>
+                    <input matInput type="time" [(ngModel)]="evento.hora_fin">
+                    <mat-error *ngIf="errors.hora_fin">{{errors.hora_fin}}</mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="row-inputs">
+                <mat-form-field class="mat-input half-width" appearance="outline">
+                    <mat-label>Lugar</mat-label>
+                    <input matInput [(ngModel)]="evento.lugar">
+                    <mat-error *ngIf="errors.lugar">{{errors.lugar}}</mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="mat-input half-width" appearance="outline">
+                    <mat-label>Cupo Máximo</mat-label>
+                    <input matInput type="number" [(ngModel)]="evento.cupo">
+                    <mat-error *ngIf="errors.cupo">{{errors.cupo}}</mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="checkbox-container">
+                <label>Público Objetivo:</label>
+                <div class="checkbox-group">
+                    <mat-checkbox *ngFor="let opcion of publico_options" 
+                                  [checked]="opcion.checked" 
+                                  (change)="checkboxChange(opcion)">
+                        {{opcion.label}}
+                    </mat-checkbox>
+                </div>
+                <small class="error-text" *ngIf="errors.publico_objetivo">{{errors.publico_objetivo}}</small>
+            </div>
+
+            <div class="row-inputs" *ngIf="revisarProgramaEducativo()">
+                <mat-form-field class="mat-input full-width" appearance="outline">
+                    <mat-label>Programa Educativo</mat-label>
+                    <mat-select [(ngModel)]="evento.programa_educativo">
+                        <mat-option *ngFor="let prog of lista_programas" [value]="prog">{{prog}}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="errors.programa_educativo">{{errors.programa_educativo}}</mat-error>
+                </mat-form-field>
+            </div>
+
+            <mat-form-field class="mat-input" appearance="outline">
+                <mat-label>Descripción breve</mat-label>
+                <textarea matInput [(ngModel)]="evento.descripcion" maxlength="300" rows="3"></textarea>
+                <mat-hint align="end">{{evento.descripcion?.length || 0}}/300</mat-hint>
+                <mat-error *ngIf="errors.descripcion">{{errors.descripcion}}</mat-error>
+            </mat-form-field>
+
+            <div class="buttons-container">
+                <button mat-button color="warn" (click)="regresar()">Cancelar</button>
+                <button mat-raised-button color="primary" (click)="registrar()" *ngIf="!isUpdate">Registrar</button>
+                <button mat-raised-button color="primary" (click)="actualizar()" *ngIf="isUpdate">Actualizar</button>
+            </div>
+        </div>
+    </div>
+</div>

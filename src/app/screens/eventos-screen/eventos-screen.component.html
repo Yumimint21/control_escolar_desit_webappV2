@@ -1,0 +1,73 @@
+<div class="wrapper">
+    <div class="section-list">
+        <div class="header-content">
+            <h1>Lista de Eventos Académicos</h1>
+            <button mat-raised-button color="primary" *ngIf="isAdmin()" [routerLink]="['/registro-eventos']">
+                <mat-icon>add</mat-icon> Registrar Evento
+            </button>
+        </div>
+
+        <mat-form-field appearance="standard">
+            <mat-label>Filtrar por nombre</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Ej. Congreso..." #input>
+        </mat-form-field>
+
+        <div class="mat-elevation-z8">
+            <table mat-table [dataSource]="dataSource" matSort>
+
+                <ng-container matColumnDef="nombre">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+                    <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="tipo">
+                    <th mat-header-cell *matHeaderCellDef> Tipo </th>
+                    <td mat-cell *matCellDef="let element"> {{element.tipo}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="fecha">
+                    <th mat-header-cell *matHeaderCellDef> Fecha </th>
+                    <td mat-cell *matCellDef="let element"> {{element.fecha_realizacion | date:'dd/MM/yyyy'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="horario">
+                    <th mat-header-cell *matHeaderCellDef> Horario </th>
+                    <td mat-cell *matCellDef="let element"> {{element.hora_inicio}} - {{element.hora_fin}} </td>
+                </ng-container>
+
+                 <ng-container matColumnDef="lugar">
+                    <th mat-header-cell *matHeaderCellDef> Lugar </th>
+                    <td mat-cell *matCellDef="let element"> {{element.lugar}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="responsable">
+                    <th mat-header-cell *matHeaderCellDef> Responsable </th>
+                    <td mat-cell *matCellDef="let element"> {{element.responsable_nombre || element.responsable}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="acciones">
+                    <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                    <td mat-cell *matCellDef="let element">
+                        <div *ngIf="isAdmin()">
+                            <button mat-icon-button color="primary" (click)="goEditar(element.id)">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button mat-icon-button color="warn" (click)="delete(element.id)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="4">No se encontraron datos con el filtro "{{input.value}}"</td>
+                </tr>
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+        </div>
+    </div>
+</div>

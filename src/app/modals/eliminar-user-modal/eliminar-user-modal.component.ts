@@ -10,6 +10,7 @@ import { EventosService } from 'src/app/services/eventos.service';
   templateUrl: './eliminar-user-modal.component.html',
   styleUrls: ['./eliminar-user-modal.component.scss']
 })
+
 export class EliminarUserModalComponent implements OnInit {
 
   public rol: string = "";
@@ -18,71 +19,65 @@ export class EliminarUserModalComponent implements OnInit {
     private administradoresService: AdministradoresService,
     private maestrosService: MaestrosService,
     private alumnosService: AlumnosService,
-    private eventosService: EventosService, // Agregamos el servicio de eventos por si acaso, aunque para editar no se usa aquí
     private dialogRef: MatDialogRef<EliminarUserModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    private eventosService: EventosService,
+    @Inject (MAT_DIALOG_DATA) public data: any
   ) { }
 
   ngOnInit(): void {
     this.rol = this.data.rol;
   }
 
-  public onNoClick() {
-    this.dialogRef.close({ isDelete: false });
+  public cerrar_modal(){
+    this.dialogRef.close({isDelete:false});
   }
 
-  public onDelete() {
-    // Caso especial: Editar Evento (Solo confirmación)
-    if (this.rol === 'evento_editar') {
-      // Al cerrar con true, el componente padre (RegistroEventos) ejecutará la actualización
-      this.dialogRef.close({ isDelete: true });
-      return;
-    }
-    
-    // Caso: Eliminar Evento (desde la tabla)
-    // Nota: Si usaste 'evento' en la tabla para eliminar, agregamos la lógica aquí
-    if (this.rol === 'evento') {
-       this.eventosService.eliminarEvento(this.data.id).subscribe(
-        (response) => {
-          console.log(response);
-          this.dialogRef.close({ isDelete: true });
-        }, (error) => {
-          this.dialogRef.close({ isDelete: false });
-        }
-      );
-      return;
-    }
-
-    // Lógica existente para Usuarios
-    if (this.rol == "administrador") {
+  public eliminarUser(){
+    if(this.rol == "administrador"){
+      // Entonces elimina un administrador
       this.administradoresService.eliminarAdmin(this.data.id).subscribe(
-        (response) => {
+        (response)=>{
           console.log(response);
-          this.dialogRef.close({ isDelete: true });
-        }, (error) => {
-          this.dialogRef.close({ isDelete: false });
+          this.dialogRef.close({isDelete:true});
+        }, (error)=>{
+          this.dialogRef.close({isDelete:false});
         }
+
       );
 
-    } else if (this.rol == "maestro") {
+    }else if(this.rol == "maestro"){
+      // Entonces elimina un maestro
       this.maestrosService.eliminarMaestro(this.data.id).subscribe(
-        (response) => {
+        (response)=>{
           console.log(response);
-          this.dialogRef.close({ isDelete: true });
-        }, (error) => {
-          this.dialogRef.close({ isDelete: false });
+          this.dialogRef.close({isDelete:true});
+        }, (error)=>{
+          this.dialogRef.close({isDelete:false});
         }
       );
 
-    } else if (this.rol == "alumno") {
+    }else if(this.rol == "alumno"){
+      // Entonces elimina un alumno
       this.alumnosService.eliminarAlumno(this.data.id).subscribe(
-        (response) => {
+        (response)=>{
           console.log(response);
-          this.dialogRef.close({ isDelete: true });
-        }, (error) => {
-          this.dialogRef.close({ isDelete: false });
+          this.dialogRef.close({isDelete:true});
+        }, (error)=>{
+          this.dialogRef.close({isDelete:false});
+        }
+      );
+    }else if(this.rol == "evento"){
+      // Entonces elimina un evento
+      this.eventosService.eliminarEvento(this.data.id).subscribe(
+        (response)=>{
+          console.log(response);
+          this.dialogRef.close({isDelete:true});
+        }, (error)=>{
+          this.dialogRef.close({isDelete:false});
         }
       );
     }
+
   }
+
 }

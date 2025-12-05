@@ -1,12 +1,12 @@
-// Paleta azul suave y profesional
-$sidebar-bg: #23395d;      // Azul oscuro, menos saturado
-$sidebar-accent: #1a2c48;  // Azul aún más oscuro
-$sidebar-hover: #30507a;   // Azul medio para hover
-$sidebar-active: #457ab9;  // Azul claro para activo
-$icon-color: #b5c6e0;      // Azul grisáceo para iconos
-$text-color: #e4ecfa;      // Azul muy claro para texto
-$logout-bg: #223153;       // Fondo botón logout
-$logout-hover: #3e5a8d;    // Hover botón logout
+$sidebar-bg: #23395d;      
+$sidebar-accent: #1a2c48; 
+$sidebar-hover: #30507a;   
+$sidebar-active: #457ab9; 
+$icon-color: #b5c6e0;      
+$text-color: #e4ecfa;      
+$logout-bg: #223153;       
+$logout-hover: #ef4444;    
+
 
 .sidebar-container {
   height: 100vh;
@@ -14,13 +14,14 @@ $logout-hover: #3e5a8d;    // Hover botón logout
 }
 
 .sidebar {
-  width: 200px;
+  width: 250px; 
   background: $sidebar-bg;
   color: $text-color;
   display: flex;
   flex-direction: column;
   padding-top: 2rem;
   padding-bottom: 2rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 nav {
@@ -37,130 +38,119 @@ nav {
 }
 
 .sidebar-list li {
-  display: flex;
-  align-items: center;
   padding: 1rem 1.2rem;
   cursor: pointer;
-  transition: background 0.18s, color 0.18s;
+  transition: all 0.2s ease;
   font-size: 1rem;
-  border-radius: 6px;
   color: $text-color;
+  display: flex;
+  align-items: center;
 
+  // Iconos generales
   mat-icon {
-    margin-right: 0.6rem;
+    margin-right: 15px;
     font-size: 1.2em;
     color: $icon-color;
-    transition: color 0.18s;
+    transition: color 0.2s;
   }
-}
 
-.sidebar-list li.active,
-.sidebar-list li:hover {
-  background: $sidebar-hover;
-  color: $text-color;
-
-  mat-icon {
-    color: $text-color;
-  }
-}
-
-.sidebar-list li.active {
-  background: $sidebar-active;
-  color: #fff;
-
-  mat-icon {
-    color: #fff;
-  }
-}
-
-// Special styling for non-functional items
-.sidebar-list li.eventos-academicos {
-  opacity: 0.8;
-
+  // Hover general
   &:hover {
-    background: rgba($sidebar-hover, 0.5);
-    opacity: 1;
+    background: $sidebar-hover;
+    color: #fff;
+    mat-icon { color: #fff; }
+  }
+
+  // Estado Activo
+  &.active {
+    background: $sidebar-active;
+    color: #fff;
+    border-left: 4px solid #fff; 
+    mat-icon { color: #fff; }
   }
 }
 
+// Dropdown
+.dropdown-toggle {
+  display: flex;
+  justify-content: space-between !important; 
+  align-items: center;
+  
+
+  .label-container {
+    display: flex;
+    align-items: center;
+    gap: 0; 
+  }
+
+
+  .arrow-icon {
+    margin-right: 0 !important; 
+    font-size: 1.3em;
+    transition: transform 0.3s ease; 
+    
+    &.rotate {
+      transform: rotate(180deg); 
+    }
+  }
+}
+
+
+.active-parent {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  color: #fff;
+}
+
+
+.submenu-container {
+  background-color: $sidebar-accent; 
+  overflow: hidden;
+  box-shadow: inset 0 4px 6px -4px rgba(0,0,0,0.3); 
+}
+
+
+.submenu-item {
+  padding-left: 3.5rem !important; 
+  font-size: 0.9rem !important; 
+  border-left: none !important; 
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+  }
+
+  &.active {
+    color: #60a5fa !important; 
+    background: transparent !important;
+    font-weight: bold;
+    
+    mat-icon { color: #60a5fa !important; }
+  }
+}
+
+// --- LOGOUT ---
 .logout-btn {
   margin: 1.2rem;
   width: calc(100% - 2.4rem);
   background: $logout-bg;
   color: $text-color;
-  transition: background 0.18s, color 0.18s;
-
+  border-radius: 8px;
+  
   &:hover {
     background: $logout-hover;
     color: #fff;
   }
-}
-
-.sidebar-toggle {
-  position: fixed;
-  top: 1rem;
-  left: 1rem;
-  z-index: 20;
-  background: $sidebar-bg;
-  color: $icon-color;
-  border-radius: 50%;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
-  display: none;
-}
-
-@media (max-width: 992px) {
-  .sidebar-toggle {
-    display: block;
-  }
-  .sidebar {
-    width: 70vw;
-    min-width: 150px;
-    max-width: 90vw;
-    position: fixed;
-    left: 0;
-    top: 0;
-    height: 100vh;
-    transition: width 0.2s;
-    box-shadow: 2px 0 8px rgba(0,0,0,0.09);
-  }
-}
-.sidebar-container {
-  height: 100%;
-  min-height: 100vh;
-  background: transparent;
-}
-
-.sidebar {
-  width: 200px;
-  background: $sidebar-bg;
-  color: $text-color;
-  display: flex;
-  flex-direction: column;
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-  height: 100%; // <--- ¡No uses height: 100vh aquí!
-}
-
-// ESTILOS NUEVOS PARA EL DROPDOWN
-// Estilo para el padre cuando está abierto
-.sidebar-list li.active-parent {
-  background-color: rgba($sidebar-hover, 0.5);
-}
-
-// Estilo para los hijos (los ítems del submenú)
-.sidebar-list li.submenu-item {
-  padding-left: 2.5rem; // Sangría para que se vea anidado
-  background-color: #1a2c48; // Un tono más oscuro que el fondo normal (sidebar-accent)
-  font-size: 0.95rem; // Texto ligeramente más pequeño
-  border-left: 4px solid transparent; // Borde invisible para mantener alineación
-
-  &:hover {
-    background-color: $sidebar-hover;
-    border-left: 4px solid $sidebar-active; // Efecto visual al pasar el mouse
-  }
-
+  
   mat-icon {
-    font-size: 1.1em; // Iconos un poco más pequeños
-    margin-right: 0.5rem;
+    margin-right: 8px;
+  }
+}
+
+// --- Móvil---
+@media (max-width: 992px) {
+  .sidebar {
+    position: fixed;
+    z-index: 1000;
+    height: 100vh;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.3);
   }
 }

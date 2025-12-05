@@ -1,38 +1,65 @@
 .wrapper {
-    padding: 20px;
-    background-color: #f5f5f5;
-    min-height: 90vh;
+    min-height: 100vh;
+    background-color: #f4f7fb; // Color de fondo grisáceo suave
+    
+    // --- ESTAS SON LAS LÍNEAS CLAVE ---
+    margin-left: 250px; // Empuja el contenido a la derecha (ancho del sidebar)
+    padding-top: 80px;  // Empuja el contenido abajo (alto del navbar + espacio extra)
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-bottom: 20px;
+    box-sizing: border-box;
+
+    // Ajuste para celular (Móvil)
+    @media (max-width: 992px) {
+        margin-left: 0;     // En celular no hay sidebar fijo
+        padding-top: 80px;  // Solo el espacio del navbar
+    }
 }
 
 .section-list {
     background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    padding: 25px; // Un poco más de espacio interno
+    border-radius: 12px; // Bordes más redondeados
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); // Sombra más suave y moderna
+    
+    // Para asegurar que la tabla no se desborde si es muy ancha
+    overflow-x: auto; 
 }
 
 .header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    flex-wrap: wrap; // Evita que el botón se encime en pantallas chicas
 
     h1 {
         margin: 0;
-        color: #333;
+        color: #2c3e50; // Un gris oscuro más elegante
         font-family: 'Nexa Bold', sans-serif;
+        font-size: 1.5rem;
     }
+}
+
+// Estilo para el input de filtro
+mat-form-field {
+    width: 100%;
+    margin-bottom: 10px;
+    font-size: 14px;
 }
 
 table {
     width: 100%;
 }
 
-.mat-form-field {
-    font-size: 14px;
-    width: 100%;
+td, th {
+    padding: 12px 8px; // Un poco más de aire en las celdas
 }
 
-td, th {
-    width: auto;
+// Opcional: Estilo para los encabezados de la tabla
+th.mat-header-cell {
+    color: #1a2b49; // Azul oscuro para los títulos de columnas
+    font-weight: bold;
+    font-size: 14px;
 }

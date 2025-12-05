@@ -16,6 +16,8 @@ export class NavbarUserComponent implements OnInit {
   public mobileOpen: boolean = false;
   public userRole: string = '';
 
+  public isEventosOpen: boolean = false;
+
   // Estas variables se utilizarán por si se habilita el tema oscuro
   paletteMode: 'light' | 'dark' = 'light';
   colorPalettes = {
@@ -82,6 +84,10 @@ export class NavbarUserComponent implements OnInit {
 
   toggleSidebar() {
     this.mobileOpen = !this.mobileOpen;
+  }
+
+  public toggleEventos() {
+    this.isEventosOpen = !this.isEventosOpen;
   }
 
   closeSidebar() {

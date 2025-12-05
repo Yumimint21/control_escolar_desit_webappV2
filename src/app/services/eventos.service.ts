@@ -30,7 +30,7 @@ export class EventosService {
       hora_inicio: '',
       hora_fin: '',
       lugar: '',
-      publico_objetivo: [], // Array para checkboxes
+      publico_objetivo: [], 
       programa_educativo: '',
       responsable: '',
       descripcion: '',
@@ -38,37 +38,35 @@ export class EventosService {
     };
   }
 
-  // Validaciones
   public validarEvento(data: any) {
     console.log('Validando evento... ', data);
     let error: any = [];
 
-    // 2. Nombre del evento: Solo letras, números y espacios
+    // Nombre: Letras, números y espacios 
     if (!this.validatorService.required(data['nombre'])) {
       error['nombre'] = this.errorService.required;
-    } else if (!/^[a-zA-Z0-9\s]+$/.test(data['nombre'])) {
+    } else if (!/^[a-zA-Z0-9\sñÑáéíóúÁÉÍÓÚ]+$/.test(data['nombre'])) {
       error['nombre'] = 'Solo se permiten letras, números y espacios';
     }
 
-    // 3. Tipo de evento
+    // Tipo de evento
     if (!this.validatorService.required(data['tipo'])) {
       error['tipo'] = this.errorService.required;
     }
 
-    // 4. Fecha de realización
+    // Fecha: No anterior a hoy
     if (!this.validatorService.required(data['fecha_realizacion'])) {
       error['fecha_realizacion'] = this.errorService.required;
     } else {
-      // Validar que no sea anterior a hoy
       const fechaEvento = new Date(data['fecha_realizacion']);
       const hoy = new Date();
-      hoy.setHours(0, 0, 0, 0); // Resetear hora para comparar solo fecha
+      hoy.setHours(0, 0, 0, 0); 
       if (fechaEvento < hoy) {
         error['fecha_realizacion'] = 'No se pueden seleccionar fechas anteriores al día actual';
       }
     }
 
-    // 5. Horario
+    // Horario: Inicio < Fin
     if (!this.validatorService.required(data['hora_inicio'])) {
       error['hora_inicio'] = this.errorService.required;
     }
@@ -81,55 +79,44 @@ export class EventosService {
       }
     }
 
-    // 6. Lugar: Alfanuméricos y espacios
+    // Lugar: Alfanuméricos y espacios (Agregado soporte para acentos)
     if (!this.validatorService.required(data['lugar'])) {
       error['lugar'] = this.errorService.required;
-    } else if (!/^[a-zA-Z0-9\s]+$/.test(data['lugar'])) {
+    } else if (!/^[a-zA-Z0-9\sñÑáéíóúÁÉÍÓÚ]+$/.test(data['lugar'])) {
       error['lugar'] = 'Solo caracteres alfanuméricos y espacios';
     }
 
-    // 7. Público objetivo (Validar que al menos uno esté seleccionado si es array)
+    // Público objetivo
     if (!data['publico_objetivo'] || data['publico_objetivo'].length === 0) {
       error['publico_objetivo'] = 'Debe seleccionar al menos un público objetivo';
     }
 
-    // 8. Programa educativo (Solo si "Estudiantes" está seleccionado)
-    // Asumimos que "Estudiantes" es una opción dentro del array o boolean
-    if (data['publico_objetivo'].includes('Estudiantes')) {
+    // Programa educativo (Solo si es Estudiante)
+    if (data['publico_objetivo'] && data['publico_objetivo'].includes('Estudiantes')) {
       if (!this.validatorService.required(data['programa_educativo'])) {
         error['programa_educativo'] = this.errorService.required;
       }
     }
 
-    // 9. Responsable
+    // Responsable
     if (!this.validatorService.required(data['responsable'])) {
       error['responsable'] = this.errorService.required;
     }
 
-    // REQUISITO 10: Validación estricta de caracteres en descripción
+    // Descripción
     if (!this.validatorService.required(data['descripcion'])) {
       error['descripcion'] = this.errorService.required;
     } else if (!this.validatorService.max(data['descripcion'], 300)) {
       error['descripcion'] = this.errorService.max(300);
     } else if (!/^[a-zA-Z0-9\s.,;!?()ñÑáéíóúÁÉÍÓÚ]+$/.test(data['descripcion'])) {
-      error['descripcion'] = 'Solo se permiten letras, números y signos de puntuación básicos';
+      error['descripcion'] = 'Caracteres inválidos en la descripción';
     }
 
+    // Cupo: Entero positivo, max 3 dígitos
     if (!this.validatorService.required(data['cupo'])) {
       error['cupo'] = this.errorService.required;
     } else if (!this.validatorService.numeric(data['cupo'])) {
-      error['cupo'] = this.errorService.numeric;
-    } else if (parseInt(data['cupo']) <= 0) {
-      error['cupo'] = 'Debe ser un número positivo';
-    } else if (data['cupo'].toString().length > 3) {
-      error['cupo'] = 'Máximo 3 dígitos';
-    }
-
-    // 11. Cupo máximo: Enteros positivos, 3 dígitos (max 999)
-    if (!this.validatorService.required(data['cupo'])) {
-      error['cupo'] = this.errorService.required;
-    } else if (!this.validatorService.numeric(data['cupo'])) {
-      error['cupo'] = this.errorService.numeric;
+      error['cupo'] = 'Debe ser un número válido';
     } else if (parseInt(data['cupo']) <= 0) {
       error['cupo'] = 'Debe ser un número positivo';
     } else if (data['cupo'].toString().length > 3) {
@@ -140,7 +127,6 @@ export class EventosService {
   }
 
   // --- Servicios HTTP ---
-
   public registrarEvento(data: any): Observable<any> {
     const token = this.facadeService.getSessionToken();
     const headers = new HttpHeaders({

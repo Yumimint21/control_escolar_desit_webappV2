@@ -2,6 +2,7 @@
   <!-- Desktop sidebar -->
   <nav class="scoop-side-navbar" *ngIf="!isMobileView">
     <ul class="scoop-navbar-list">
+      
       <li *ngIf="canSeeRegisterItem()" routerLink="/registro-usuarios" routerLinkActive="active"
         class="scoop-navbar-item">
         <span class="material-icons">person_add</span>
@@ -28,12 +29,30 @@
         <span class="material-icons">library_books</span>
         <span>Materias</span>
       </li>
-      <li *ngIf="canSeeTeacherItems()" routerLink="/eventos-academicos" routerLinkActive="active"
-        class="scoop-navbar-item">
-        <span class="material-icons">event</span>
-        <span>Eventos Académicos</span>
+
+      <li *ngIf="canSeeStudentItems()" class="scoop-navbar-item dropdown-toggle" (click)="toggleEventos()">
+        <div class="label-container">
+          <span class="material-icons">event</span>
+          <span>Eventos Académicos</span>
+        </div>
+        <span class="material-icons arrow-icon" [class.rotate]="isEventosOpen">expand_more</span>
       </li>
-    </ul>
+
+      <div class="submenu-container" *ngIf="isEventosOpen">
+        
+        <li *ngIf="isAdmin()" routerLink="/registro-eventos" routerLinkActive="active" class="scoop-navbar-item submenu-item">
+          <span class="material-icons">add_circle_outline</span>
+          <span>Registrar</span>
+        </li>
+
+        <li routerLink="/eventos-academicos" routerLinkActive="active" class="scoop-navbar-item submenu-item">
+          <span class="material-icons">list</span>
+          <span>Ver Lista</span>
+        </li>
+                
+      </div>
+      </ul>
+    
     <button class="scoop-logout-btn" (click)="logout()">
       <span class="material-icons">logout</span>
       <span>Cerrar sesión</span>
@@ -88,11 +107,26 @@
           <span class="material-icons">library_books</span>
           <span>Materias</span>
         </li>
-        <li *ngIf="canSeeTeacherItems()" routerLink="/eventos-academicos" routerLinkActive="active"
-          class="scoop-navbar-item" (click)="closeSidebar()">
-          <span class="material-icons">event</span>
-          <span>Eventos Académicos</span>
+        <li *ngIf="canSeeStudentItems()" class="scoop-navbar-item dropdown-toggle" (click)="toggleEventos()" style="cursor: pointer; justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="material-icons">event</span>
+            <span>Eventos Académicos</span>
+          </div>
+          <span class="material-icons" style="font-size: 18px;">{{ isEventosOpen ? 'expand_less' : 'expand_more' }}</span>
         </li>
+
+        <div class="submenu-desktop" *ngIf="isEventosOpen" style="background-color: rgba(0,0,0,0.05);">
+          
+          <li *ngIf="isAdmin()" routerLink="/registro-eventos" routerLinkActive="active" class="scoop-navbar-item" style="padding-left: 40px;">
+            <span class="material-icons" style="font-size: 20px;">add_circle_outline</span>
+            <span style="font-size: 14px;">Registrar</span>
+          </li>
+
+          <li routerLink="/eventos-academicos" routerLinkActive="active" class="scoop-navbar-item" style="padding-left: 40px;">
+            <span class="material-icons" style="font-size: 20px;">list</span>
+            <span style="font-size: 14px;">Ver Lista</span>
+          </li>         
+        </div>
       </ul>
       <button class="scoop-logout-btn" (click)="logout(); closeSidebar()">
         <span class="material-icons">logout</span>
@@ -100,4 +134,3 @@
       </button>
     </nav>
   </ng-container>
-  <!-- end navbar-sidebar-wrapper -->

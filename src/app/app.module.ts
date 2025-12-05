@@ -15,7 +15,6 @@ import { AdminScreenComponent } from './screens/admin-screen/admin-screen.compon
 import { AlumnosScreenComponent } from './screens/alumnos-screen/alumnos-screen.component';
 import { MaestrosScreenComponent } from './screens/maestros-screen/maestros-screen.component';
 import { GraficasScreenComponent } from './screens/graficas-screen/graficas-screen.component';
-// --- NUEVOS COMPONENTES (Corregidos) ---
 import { RegistroEventosScreenComponent } from './screens/registro-eventos-screen/registro-eventos-screen.component';
 import { EventosScreenComponent } from './screens/eventos-screen/eventos-screen.component';
 
@@ -47,6 +46,7 @@ import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginato
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 // Otros Módulos
 import { NgChartsModule } from 'ng2-charts';
@@ -72,7 +72,7 @@ import { getSpanishPaginatorIntl } from './shared/spanish-paginator-intl';
     SidebarComponent,
     EliminarUserModalComponent,
     GraficasScreenComponent,
-    // Declaraciones de Eventos
+
     RegistroEventosScreenComponent,
     EventosScreenComponent
   ],
@@ -99,6 +99,7 @@ import { getSpanishPaginatorIntl } from './shared/spanish-paginator-intl';
     NgChartsModule,
     MatDialogModule,
     MatSortModule,
+    NgxMaterialTimepickerModule,
   ],
   providers: [
     CookieService,

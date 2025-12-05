@@ -41,7 +41,7 @@
 }
 
 .main-content {
-  margin-left: 220px;
+  margin-left: 250px;
   margin-top: 56px;
   padding: 2rem 0 0 0;
   min-height: calc(100vh - 56px);
@@ -53,7 +53,7 @@
   top: 0;
   left: 0;
   height: 100vh;
-  width: 220px;
+  width: 250px;
   z-index: 101;
   background: var(--sidebar-bg);
   color: #e4ecfa;
@@ -67,10 +67,10 @@
 .scoop-navbar {
   position: fixed;
   top: 0;
-  left: 220px;
+  left: 250px;
   right: 0;
   height: 56px;
-  width: calc(100vw - 220px);
+  width: calc(100vw - 250px);
   z-index: 102;
   display: flex;
   align-items: center;
@@ -377,4 +377,59 @@
   margin-top: 2rem;
   font-size: 1.08rem;
   padding: 1rem 1.2rem;
+}
+// --- ESTILOS DEL DROPDOWN (NUEVO) ---
+
+// El botón padre ("Eventos")
+.dropdown-toggle {
+  justify-content: space-between !important; // Manda la flecha al final
+  
+  .label-container {
+    display: flex;
+    align-items: center;
+    // El icono ya tiene margin-right por la clase .scoop-navbar-item .material-icons
+  }
+
+  .arrow-icon {
+    margin-right: 0 !important; // Quitamos margen derecho extra
+    transition: transform 0.3s ease;
+    
+    &.rotate {
+      transform: rotate(180deg); // Gira la flecha
+    }
+  }
+}
+
+// El contenedor del submenú
+.submenu-container {
+  background-color: rgba(0, 0, 0, 0.2); // Fondo oscuro sutil
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+}
+
+// Los items hijos (Ver Lista, Registrar)
+.submenu-item {
+  padding-left: 2.8rem !important; // Sangría para que se vea indentado
+  font-size: 0.95rem !important; // Texto un poco más pequeño
+  background: transparent;
+  margin-bottom: 0 !important; // Pegaditos
+  
+  .material-icons {
+    font-size: 1.1rem !important; // Iconos más pequeños
+  }
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  &.active {
+    background: transparent !important; // Sin fondo azul fuerte
+    color: #64b5f6 !important; // Texto azul claro
+    font-weight: bold;
+    
+    .material-icons {
+      color: #64b5f6 !important;
+    }
+  }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort'; // <--- 1. NUEVO IMPORT
 import { Router } from '@angular/router';
 import { FacadeService } from 'src/app/services/facade.service';
 import { EventosService } from 'src/app/services/eventos.service';
@@ -19,11 +20,10 @@ export class EventosScreenComponent implements OnInit {
   public token: string = "";
   public lista_eventos: any[] = [];
 
-  // Configuración de la tabla
-  displayedColumns: string[] = ['nombre', 'tipo', 'fecha', 'horario', 'lugar', 'responsable', 'acciones'];
-  dataSource = new MatTableDataSource<any>(this.lista_eventos);
+  displayedColumns: string[] = ['nombre', 'tipo', 'fecha', 'horario', 'lugar', 'cupo', 'publico', 'programa', 'descripcion', 'responsable', 'acciones'];  dataSource = new MatTableDataSource<any>(this.lista_eventos);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort; 
 
   constructor(
     public facadeService: FacadeService,
@@ -36,8 +36,6 @@ export class EventosScreenComponent implements OnInit {
     this.name_user = this.facadeService.getUserCompleteName();
     this.rol = this.facadeService.getUserGroup();
 
-    // Regla de negocio: Validar permisos de visualización al cargar
-    // Aunque el sidebar ya filtra, aquí aseguramos que vean lo correcto
     this.obtenerEventos();
     this.initPaginator();
   }
@@ -45,6 +43,7 @@ export class EventosScreenComponent implements OnInit {
   public initPaginator() {
     setTimeout(() => {
       this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort; 
     }, 500);
   }
 
@@ -53,65 +52,58 @@ export class EventosScreenComponent implements OnInit {
       (response) => {
         this.lista_eventos = response;
         
-        // Filtros según rol (Puntos 19 y 20 del PDF)
         if (this.rol === 'maestro') {
-          // Maestros ven: Propios de Maestros + Público General
           this.lista_eventos = this.lista_eventos.filter(e => 
             e.publico_objetivo.includes('Profesores') || 
-            e.publico_objetivo.includes('Publico General') || // Ojo con acentos según tu backend
+            e.publico_objetivo.includes('Publico General') || 
             e.publico_objetivo.includes('Público General')
           );
         } else if (this.rol === 'alumno') {
-          // Alumnos ven: Propios de Estudiantes + Público General
           this.lista_eventos = this.lista_eventos.filter(e => 
             e.publico_objetivo.includes('Estudiantes') || 
             e.publico_objetivo.includes('Publico General') ||
             e.publico_objetivo.includes('Público General')
           );
         }
-        // Admin ve todo (no se filtra)
 
-        this.dataSource.data = this.lista_eventos;
+        this.dataSource.data = this.lista_eventos;        
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort; 
       }, (error) => {
         alert("No se pudo obtener la lista de eventos");
       }
     );
   }
 
-  // Buscador (Filtro por nombre)
   public applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
-  // Navegación a editar
   public goEditar(id: number) {
     this.router.navigate(['registro-eventos/' + id]);
   }
 
   public delete(id: number) {
     const dialogRef = this.dialog.open(EliminarUserModalComponent, {
-      data: { id: id, rol: 'evento' }, // Pasamos 'evento' para personalizar el modal si quieres
+      data: { id: id, rol: 'evento' }, 
       height: '288px',
       width: '328px',
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result.isDelete) {
-        this.eventosService.eliminarEvento(id).subscribe(
-          (response) => {
-            alert("Evento eliminado correctamente");
-            this.obtenerEventos(); // Recargar tabla
-          }, (error) => {
-            alert("No se pudo eliminar el evento");
-          }
-        );
+      if (result && result.isDelete) {        
+        alert("Evento eliminado correctamente");
+        this.obtenerEventos(); 
       }
     });
   }
 
-  // Helper para mostrar/ocultar acciones según rol
   public isAdmin() {
-    return this.rol === 'administrador' || this.rol === 'admin'; // Ajusta según como guardes el rol en BD
+    return this.rol === 'administrador' || this.rol === 'admin';
   }
 }
